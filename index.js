@@ -5,7 +5,7 @@ const express = require("express");
 const cors = require("cors");
 const connectDB = require('./config/database');
 
-const notificationRoutes = require('./routes/notifications');
+const apiModule = require('./api');
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -16,12 +16,8 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
-// Basic route for testing
-app.get("/", (req, res) => {
-  res.send("Notification System is running!");
-});
-
-app.use('/api/notifications', notificationRoutes);
+// api main route
+app.use('/api', apiModule)
 
 // Start the server
 app.listen(port, () => {
