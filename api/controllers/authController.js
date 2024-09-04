@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Settings = require("../models/Settings");
 const jwt = require("jsonwebtoken");
 
 // Generate JWT Token
@@ -14,7 +15,6 @@ exports.signup = async (req, res) => {
   try {
     // Check if user already exists
     let user = await User.findOne({ email });
-
     if (user) {
       return res
         .status(400)
@@ -26,6 +26,14 @@ exports.signup = async (req, res) => {
       name,
       email,
       password,
+    });
+
+    // Create default settings for the new user
+    await Settings.create({
+      user: user._id,
+      emailNotifications: true, // Default value
+      smsNotifications: true, // Default value
+      dailyDigest: true, // Default value
     });
 
     // Return the token
